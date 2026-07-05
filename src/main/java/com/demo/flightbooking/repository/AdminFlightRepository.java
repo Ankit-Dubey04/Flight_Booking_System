@@ -3,8 +3,8 @@ package com.demo.flightbooking.repository;
 import com.demo.flightbooking.models.Flight;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.Optional;
+//import java.util.Optional;
 
 public interface AdminFlightRepository extends JpaRepository<Flight, Long> {
-    Optional<Flight> findByFlightNumber(String flightNumber);
+//    Optional<Flight> findByFlightNumber(String flightNumber);
 }
