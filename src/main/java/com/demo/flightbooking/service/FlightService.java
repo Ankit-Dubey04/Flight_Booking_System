@@ -1,6 +1,11 @@
 package com.demo.flightbooking.service;
 
-public class FlightService {
+import com.demo.flightbooking.dto.FlightDto;
+import com.demo.flightbooking.models.Flight;
+
+import java.util.List;
+
+public interface FlightService {
     Flight createFlight(FlightDto flightDto);
 
     Flight updateFlight(Long id, FlightDto flightDto);
