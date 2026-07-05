@@ -3,17 +3,17 @@ package com.demo.flightbooking.service;
 import com.demo.flightbooking.dto.FlightDto;
 import com.demo.flightbooking.exception.ResourceNotFoundException;
 import com.demo.flightbooking.models.Flight;
-import com.demo.flightbooking.repository.FlightRepository;
+import com.demo.flightbooking.repository.AdminFlightRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class FlightServiceImpl implements FlightService {
-    private final FlightRepository flightRepository;
+public class AdminFlightServiceImpl implements AdminFlightService {
+    private final AdminFlightRepository adminFlightRepository;
 
-    public FlightServiceImpl(FlightRepository flightRepository) {
-        this.flightRepository = flightRepository;
+    public AdminFlightServiceImpl(AdminFlightRepository adminFlightRepository) {
+        this.adminFlightRepository = adminFlightRepository;
     }
 
     @Override
@@ -29,13 +29,13 @@ public class FlightServiceImpl implements FlightService {
         flight.setPrice(dto.getPrice());
         flight.setStatus(dto.getStatus());
 
-        return flightRepository.save(flight);
+        return adminFlightRepository.save(flight);
     }
 
     @Override
     public Flight updateFlight(Long id, FlightDto dto) {
 
-        Flight flight = flightRepository.findById(id)
+        Flight flight = adminFlightRepository.findById(id)
                 .orElseThrow(() ->
                         new ResourceNotFoundException("Flight not found"));
 
@@ -48,27 +48,27 @@ public class FlightServiceImpl implements FlightService {
         flight.setPrice(dto.getPrice());
         flight.setStatus(dto.getStatus());
 
-        return flightRepository.save(flight);
+        return adminFlightRepository.save(flight);
     }
 
     @Override
     public void deleteFlight(Long id) {
 
-        Flight flight = flightRepository.findById(id)
+        Flight flight = adminFlightRepository.findById(id)
                 .orElseThrow(() ->
                         new ResourceNotFoundException("Flight not found"));
 
-        flightRepository.delete(flight);
+        adminFlightRepository.delete(flight);
     }
 
     @Override
     public List<Flight> getAllFlights() {
-        return flightRepository.findAll();
+        return adminFlightRepository.findAll();
     }
 
     @Override
     public Flight getFlightById(Long id) {
-        return flightRepository.findById(id)
+        return adminFlightRepository.findById(id)
                 .orElseThrow(() ->
                         new ResourceNotFoundException("Flight not found"));
     }

@@ -5,7 +5,7 @@ import com.demo.flightbooking.models.Flight;
 
 import java.util.List;
 
-public interface FlightService {
+public interface AdminFlightService {
     Flight createFlight(FlightDto flightDto);
 
     Flight updateFlight(Long id, FlightDto flightDto);
