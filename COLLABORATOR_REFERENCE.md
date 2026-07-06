@@ -12,6 +12,8 @@ This file is a handoff reference for collaborators and coding agents working in 
   - admin flight management
   - user flight browsing
   - booking and ticket creation
+  - one-way and round-trip booking
+  - text ticket download
   - booking cancellation
   - class-wise pricing, seats, and discounts
 
@@ -28,6 +30,7 @@ This file is a handoff reference for collaborators and coding agents working in 
   - `BUSINESS`
   - `FIRST_CLASS`
 - Booking price is based on selected class price, then reduced by the flight discount percentage
+- Round-trip booking is represented by one booking row with an optional return flight
 
 ## Key Files
 
@@ -132,10 +135,15 @@ Main fields:
 - `ticketNumber`
 - `user`
 - `flight`
+- `returnFlight`
 - `travelClass`
 - `seatsBooked`
 - `pricePerSeat`
+- `returnPricePerSeat`
 - `discountPercentage`
+- `returnDiscountPercentage`
+- `outboundTotalPrice`
+- `returnTotalPrice`
 - `totalPrice`
 - `status`
 - `passengerName`
@@ -175,9 +183,17 @@ Requires authentication.
 - `POST /api/bookings`
 - `GET /api/bookings/my`
 - `GET /api/bookings/ticket/{ticketNumber}`
+- `GET /api/bookings/ticket/{ticketNumber}/download`
 - `PATCH /api/bookings/ticket/{ticketNumber}/cancel`
 
 Requires authentication.
+
+Round-trip request behavior:
+- one-way booking uses `flightId`
+- round-trip booking uses `flightId` plus `returnFlightId`
+- `returnFlightId` must refer to a different flight whose route is the reverse of the outbound route
+- the return flight must depart after the outbound flight arrives when both timestamps are present
+- the ticket download endpoint returns a plain text `.txt` attachment for the authenticated user's owned ticket
 
 ## Security Behavior
 
@@ -209,24 +225,29 @@ Implemented in `BookingServiceImpl`.
 Current behavior:
 - booking uses authenticated user from `SecurityContextHolder`
 - passenger name and email are copied from logged-in user
-- seat inventory is reduced from the selected class only
+- seat inventory is reduced from the selected class on the outbound flight
+- for round trips, seat inventory is also reduced from the selected class on the return flight
 - booking price per seat is based on class price:
   - economy uses `economyPrice`, fallback `price`
   - business uses `businessPrice`, fallback `price`
   - first class uses `firstClassPrice`, fallback `price`
-- discount is applied from `flight.discountPercentage`
-- cancellation restores seats to the original class
+- outbound discount is applied from `flight.discountPercentage`
+- return discount is applied from `returnFlight.discountPercentage` when `returnFlightId` is provided
+- total price is outbound leg total plus return leg total when present
+- cancellation restores seats to the original class on both outbound and return flights
 - cancelled bookings remain stored and are marked `CANCELLED`
+- ticket download is generated in `BookingServiceImpl` as plain text and served by `BookingController`
 
 ## Known Assumptions
 
-- one booking currently represents one user-owned ticket record
+- one booking currently represents one user-owned ticket record, including both legs for a round trip
 - no separate passenger list exists yet
 - no payment integration exists
 - no booking history filter exists beyond "my bookings"
 - no admin booking management exists yet
 - flight status is a plain string, not an enum
 - discount is flight-wide, not per-class
+- downloaded tickets are plain text, not PDF
 
 ## Good Extension Points
 
@@ -256,7 +277,7 @@ These should be straightforward next additions:
 - user profile and booking history filters
 - flight search by route/date/status
 - flight status enum instead of free-form string
-- ticket PDF generation
+- ticket PDF generation or richer printable ticket formatting
 
 ## Notes For Another Codex Agent
 

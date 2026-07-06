@@ -9,19 +9,31 @@ public class BookingResponse {
     private Long bookingId;
     private String ticketNumber;
     private Long flightId;
+    private Long returnFlightId;
     private String flightNumber;
+    private String returnFlightNumber;
     private String airline;
+    private String returnAirline;
     private String source;
     private String destination;
+    private String returnSource;
+    private String returnDestination;
     private LocalDateTime departureTime;
     private LocalDateTime arrivalTime;
+    private LocalDateTime returnDepartureTime;
+    private LocalDateTime returnArrivalTime;
     private String passengerName;
     private String passengerEmail;
     private Boolean bookingForSelf;
+    private Boolean roundTrip;
     private TravelClass travelClass;
     private Integer seatsBooked;
     private Double pricePerSeat;
+    private Double returnPricePerSeat;
     private Double discountPercentage;
+    private Double returnDiscountPercentage;
+    private Double outboundTotalPrice;
+    private Double returnTotalPrice;
     private Double totalPrice;
     private BookingStatus status;
     private LocalDateTime bookedAt;
@@ -50,6 +62,14 @@ public class BookingResponse {
         this.flightId = flightId;
     }
 
+    public Long getReturnFlightId() {
+        return returnFlightId;
+    }
+
+    public void setReturnFlightId(Long returnFlightId) {
+        this.returnFlightId = returnFlightId;
+    }
+
     public String getFlightNumber() {
         return flightNumber;
     }
@@ -58,12 +78,28 @@ public class BookingResponse {
         this.flightNumber = flightNumber;
     }
 
+    public String getReturnFlightNumber() {
+        return returnFlightNumber;
+    }
+
+    public void setReturnFlightNumber(String returnFlightNumber) {
+        this.returnFlightNumber = returnFlightNumber;
+    }
+
     public String getAirline() {
         return airline;
     }
 
     public void setAirline(String airline) {
         this.airline = airline;
+    }
+
+    public String getReturnAirline() {
+        return returnAirline;
+    }
+
+    public void setReturnAirline(String returnAirline) {
+        this.returnAirline = returnAirline;
     }
 
     public String getSource() {
@@ -82,6 +118,22 @@ public class BookingResponse {
         this.destination = destination;
     }
 
+    public String getReturnSource() {
+        return returnSource;
+    }
+
+    public void setReturnSource(String returnSource) {
+        this.returnSource = returnSource;
+    }
+
+    public String getReturnDestination() {
+        return returnDestination;
+    }
+
+    public void setReturnDestination(String returnDestination) {
+        this.returnDestination = returnDestination;
+    }
+
     public LocalDateTime getDepartureTime() {
         return departureTime;
     }
@@ -96,6 +148,22 @@ public class BookingResponse {
 
     public void setArrivalTime(LocalDateTime arrivalTime) {
         this.arrivalTime = arrivalTime;
+    }
+
+    public LocalDateTime getReturnDepartureTime() {
+        return returnDepartureTime;
+    }
+
+    public void setReturnDepartureTime(LocalDateTime returnDepartureTime) {
+        this.returnDepartureTime = returnDepartureTime;
+    }
+
+    public LocalDateTime getReturnArrivalTime() {
+        return returnArrivalTime;
+    }
+
+    public void setReturnArrivalTime(LocalDateTime returnArrivalTime) {
+        this.returnArrivalTime = returnArrivalTime;
     }
 
     public String getPassengerName() {
@@ -122,6 +190,14 @@ public class BookingResponse {
         this.bookingForSelf = bookingForSelf;
     }
 
+    public Boolean getRoundTrip() {
+        return roundTrip;
+    }
+
+    public void setRoundTrip(Boolean roundTrip) {
+        this.roundTrip = roundTrip;
+    }
+
     public TravelClass getTravelClass() {
         return travelClass;
     }
@@ -146,6 +222,14 @@ public class BookingResponse {
         this.pricePerSeat = pricePerSeat;
     }
 
+    public Double getReturnPricePerSeat() {
+        return returnPricePerSeat;
+    }
+
+    public void setReturnPricePerSeat(Double returnPricePerSeat) {
+        this.returnPricePerSeat = returnPricePerSeat;
+    }
+
     public Double getTotalPrice() {
         return totalPrice;
     }
@@ -160,6 +244,30 @@ public class BookingResponse {
 
     public void setDiscountPercentage(Double discountPercentage) {
         this.discountPercentage = discountPercentage;
+    }
+
+    public Double getReturnDiscountPercentage() {
+        return returnDiscountPercentage;
+    }
+
+    public void setReturnDiscountPercentage(Double returnDiscountPercentage) {
+        this.returnDiscountPercentage = returnDiscountPercentage;
+    }
+
+    public Double getOutboundTotalPrice() {
+        return outboundTotalPrice;
+    }
+
+    public void setOutboundTotalPrice(Double outboundTotalPrice) {
+        this.outboundTotalPrice = outboundTotalPrice;
+    }
+
+    public Double getReturnTotalPrice() {
+        return returnTotalPrice;
+    }
+
+    public void setReturnTotalPrice(Double returnTotalPrice) {
+        this.returnTotalPrice = returnTotalPrice;
     }
 
     public BookingStatus getStatus() {

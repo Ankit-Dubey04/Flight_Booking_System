@@ -36,6 +36,10 @@ public class Booking {
     @JoinColumn(name = "flight_id", nullable = false)
     private Flight flight;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "return_flight_id")
+    private Flight returnFlight;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private TravelClass travelClass;
@@ -46,8 +50,16 @@ public class Booking {
     @Column(nullable = false)
     private Double pricePerSeat;
 
+    private Double returnPricePerSeat;
+
     @Column(nullable = false)
     private Double discountPercentage;
+
+    private Double returnDiscountPercentage;
+
+    private Double outboundTotalPrice;
+
+    private Double returnTotalPrice;
 
     @Column(nullable = false)
     private Double totalPrice;
@@ -105,6 +117,14 @@ public class Booking {
         this.flight = flight;
     }
 
+    public Flight getReturnFlight() {
+        return returnFlight;
+    }
+
+    public void setReturnFlight(Flight returnFlight) {
+        this.returnFlight = returnFlight;
+    }
+
     public TravelClass getTravelClass() {
         return travelClass;
     }
@@ -129,6 +149,14 @@ public class Booking {
         this.pricePerSeat = pricePerSeat;
     }
 
+    public Double getReturnPricePerSeat() {
+        return returnPricePerSeat;
+    }
+
+    public void setReturnPricePerSeat(Double returnPricePerSeat) {
+        this.returnPricePerSeat = returnPricePerSeat;
+    }
+
     public Double getTotalPrice() {
         return totalPrice;
     }
@@ -143,6 +171,30 @@ public class Booking {
 
     public void setDiscountPercentage(Double discountPercentage) {
         this.discountPercentage = discountPercentage;
+    }
+
+    public Double getReturnDiscountPercentage() {
+        return returnDiscountPercentage;
+    }
+
+    public void setReturnDiscountPercentage(Double returnDiscountPercentage) {
+        this.returnDiscountPercentage = returnDiscountPercentage;
+    }
+
+    public Double getOutboundTotalPrice() {
+        return outboundTotalPrice;
+    }
+
+    public void setOutboundTotalPrice(Double outboundTotalPrice) {
+        this.outboundTotalPrice = outboundTotalPrice;
+    }
+
+    public Double getReturnTotalPrice() {
+        return returnTotalPrice;
+    }
+
+    public void setReturnTotalPrice(Double returnTotalPrice) {
+        this.returnTotalPrice = returnTotalPrice;
     }
 
     public BookingStatus getStatus() {

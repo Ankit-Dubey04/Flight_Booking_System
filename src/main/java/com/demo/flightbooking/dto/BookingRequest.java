@@ -11,6 +11,8 @@ public class BookingRequest {
     @NotNull(message = "Flight id is required")
     private Long flightId;
 
+    private Long returnFlightId;
+
     @NotNull(message = "Travel class is required")
     private TravelClass travelClass;
 
@@ -33,6 +35,14 @@ public class BookingRequest {
 
     public void setFlightId(Long flightId) {
         this.flightId = flightId;
+    }
+
+    public Long getReturnFlightId() {
+        return returnFlightId;
+    }
+
+    public void setReturnFlightId(Long returnFlightId) {
+        this.returnFlightId = returnFlightId;
     }
 
     public TravelClass getTravelClass() {

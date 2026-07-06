@@ -11,5 +11,6 @@ public interface BookingService {
     List<BookingResponse> getMyBookings();
     BookingResponse getMyBookingByTicket(String ticketNumber);
     List<PassengerProfileResponse> getSavedPassengers();
+    String downloadMyTicket(String ticketNumber);
     BookingResponse cancelMyBooking(String ticketNumber);
 }

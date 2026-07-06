@@ -5,7 +5,10 @@ import com.demo.flightbooking.dto.BookingResponse;
 import com.demo.flightbooking.dto.PassengerProfileResponse;
 import com.demo.flightbooking.service.BookingService;
 import jakarta.validation.Valid;
+import org.springframework.http.ContentDisposition;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @RestController
@@ -40,6 +44,17 @@ public class BookingController {
     @GetMapping("/ticket/{ticketNumber}")
     public ResponseEntity<BookingResponse> getMyBookingByTicket(@PathVariable String ticketNumber) {
         return ResponseEntity.ok(bookingService.getMyBookingByTicket(ticketNumber));
+    }
+
+    @GetMapping("/ticket/{ticketNumber}/download")
+    public ResponseEntity<byte[]> downloadMyTicket(@PathVariable String ticketNumber) {
+        String ticket = bookingService.downloadMyTicket(ticketNumber);
+        String filename = ticketNumber + ".txt";
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.TEXT_PLAIN)
+                .header(HttpHeaders.CONTENT_DISPOSITION, ContentDisposition.attachment().filename(filename).build().toString())
+                .body(ticket.getBytes(StandardCharsets.UTF_8));
     }
 
     @GetMapping("/saved-passengers")
