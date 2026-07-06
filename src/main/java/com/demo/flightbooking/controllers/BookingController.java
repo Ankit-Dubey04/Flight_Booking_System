@@ -2,6 +2,7 @@ package com.demo.flightbooking.controllers;
 
 import com.demo.flightbooking.dto.BookingRequest;
 import com.demo.flightbooking.dto.BookingResponse;
+import com.demo.flightbooking.dto.PassengerProfileResponse;
 import com.demo.flightbooking.service.BookingService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -39,6 +40,11 @@ public class BookingController {
     @GetMapping("/ticket/{ticketNumber}")
     public ResponseEntity<BookingResponse> getMyBookingByTicket(@PathVariable String ticketNumber) {
         return ResponseEntity.ok(bookingService.getMyBookingByTicket(ticketNumber));
+    }
+
+    @GetMapping("/saved-passengers")
+    public ResponseEntity<List<PassengerProfileResponse>> getSavedPassengers() {
+        return ResponseEntity.ok(bookingService.getSavedPassengers());
     }
 
     @PatchMapping("/ticket/{ticketNumber}/cancel")

@@ -2,6 +2,7 @@ package com.demo.flightbooking.service;
 
 import com.demo.flightbooking.dto.BookingRequest;
 import com.demo.flightbooking.dto.BookingResponse;
+import com.demo.flightbooking.dto.PassengerProfileResponse;
 import com.demo.flightbooking.enums.BookingStatus;
 import com.demo.flightbooking.enums.TravelClass;
 import com.demo.flightbooking.exception.ResourceNotFoundException;
@@ -19,7 +20,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @Service
@@ -64,8 +67,10 @@ public class BookingServiceImpl implements BookingService {
         booking.setDiscountPercentage(discountPercentage);
         booking.setTotalPrice(discountedPricePerSeat * requestedSeats);
         booking.setStatus(BookingStatus.CONFIRMED);
-        booking.setPassengerName(user.getName());
-        booking.setPassengerEmail(user.getEmail());
+        boolean bookingForSelf = request.getBookingForSelf() == null || request.getBookingForSelf();
+        booking.setBookingForSelf(bookingForSelf);
+        booking.setPassengerName(resolvePassengerName(request, user, bookingForSelf));
+        booking.setPassengerEmail(resolvePassengerEmail(request, user, bookingForSelf));
 
         return toResponse(bookingRepository.save(booking));
     }
@@ -83,6 +88,24 @@ public class BookingServiceImpl implements BookingService {
     public BookingResponse getMyBookingByTicket(String ticketNumber) {
         User user = getCurrentUser();
         return toResponse(getOwnedBooking(ticketNumber, user.getId()));
+    }
+
+    @Override
+    public List<PassengerProfileResponse> getSavedPassengers() {
+        User user = getCurrentUser();
+        Map<String, PassengerProfileResponse> savedPassengers = new LinkedHashMap<>();
+
+        bookingRepository.findByUserIdAndBookingForSelfFalseOrderByBookedAtDesc(user.getId())
+                .forEach(booking -> {
+                    String key = passengerKey(booking.getPassengerName(), booking.getPassengerEmail());
+                    savedPassengers.putIfAbsent(key, new PassengerProfileResponse(
+                            booking.getPassengerName(),
+                            booking.getPassengerEmail(),
+                            booking.getBookedAt()
+                    ));
+                });
+
+        return List.copyOf(savedPassengers.values());
     }
 
     @Override
@@ -172,6 +195,34 @@ public class BookingServiceImpl implements BookingService {
         return discountPercentage != null ? discountPercentage : 0.0;
     }
 
+    private String resolvePassengerName(BookingRequest request, User user, boolean bookingForSelf) {
+        if (bookingForSelf) {
+            return user.getName();
+        }
+
+        if (request.getPassengerName() == null || request.getPassengerName().isBlank()) {
+            throw new IllegalArgumentException("Passenger name is required when booking for someone else");
+        }
+
+        return request.getPassengerName().trim();
+    }
+
+    private String resolvePassengerEmail(BookingRequest request, User user, boolean bookingForSelf) {
+        if (bookingForSelf) {
+            return user.getEmail();
+        }
+
+        if (request.getPassengerEmail() == null || request.getPassengerEmail().isBlank()) {
+            throw new IllegalArgumentException("Passenger email is required when booking for someone else");
+        }
+
+        return request.getPassengerEmail().trim();
+    }
+
+    private String passengerKey(String passengerName, String passengerEmail) {
+        return passengerName.trim().toLowerCase() + "|" + passengerEmail.trim().toLowerCase();
+    }
+
     private String generateTicketNumber() {
         return "TKT-" + UUID.randomUUID().toString().replace("-", "").substring(0, 10).toUpperCase();
     }
@@ -202,6 +253,7 @@ public class BookingServiceImpl implements BookingService {
         response.setArrivalTime(flight.getArrivalTime());
         response.setPassengerName(booking.getPassengerName());
         response.setPassengerEmail(booking.getPassengerEmail());
+        response.setBookingForSelf(booking.getBookingForSelf());
         response.setTravelClass(booking.getTravelClass());
         response.setSeatsBooked(booking.getSeatsBooked());
         response.setPricePerSeat(booking.getPricePerSeat());

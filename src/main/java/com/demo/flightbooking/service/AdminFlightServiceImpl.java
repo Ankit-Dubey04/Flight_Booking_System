@@ -6,6 +6,8 @@ import com.demo.flightbooking.models.Flight;
 import com.demo.flightbooking.repository.AdminFlightRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -81,9 +83,29 @@ public class AdminFlightServiceImpl implements AdminFlightService {
     }
 
     @Override
+    public List<Flight> searchFlights(String source, String destination, LocalDate departureDate) {
+        LocalDateTime startOfDay = departureDate != null ? departureDate.atStartOfDay() : null;
+        LocalDateTime endOfDay = departureDate != null ? departureDate.plusDays(1).atStartOfDay() : null;
+
+        return adminFlightRepository.searchFlights(
+                normalizeFilter(source),
+                normalizeFilter(destination),
+                startOfDay,
+                endOfDay
+        );
+    }
+
+    @Override
     public Flight getFlightById(Long id) {
         return adminFlightRepository.findById(id)
                 .orElseThrow(() ->
                         new ResourceNotFoundException("Flight not found"));
+    }
+
+    private String normalizeFilter(String value) {
+        if (value == null || value.isBlank()) {
+            return null;
+        }
+        return value.trim();
     }
 }

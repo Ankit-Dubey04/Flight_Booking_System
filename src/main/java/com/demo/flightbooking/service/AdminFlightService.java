@@ -3,6 +3,7 @@ package com.demo.flightbooking.service;
 import com.demo.flightbooking.dto.FlightDto;
 import com.demo.flightbooking.models.Flight;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface AdminFlightService {
@@ -13,6 +14,8 @@ public interface AdminFlightService {
     void deleteFlight(Long id);
 
     List<Flight> getAllFlights();
+
+    List<Flight> searchFlights(String source, String destination, LocalDate departureDate);
 
     Flight getFlightById(Long id);
 }

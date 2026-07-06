@@ -62,6 +62,9 @@ public class Booking {
     @Column(nullable = false, length = 100)
     private String passengerEmail;
 
+    @Column(nullable = false)
+    private Boolean bookingForSelf = true;
+
     @Column(name = "booked_at", nullable = false, updatable = false)
     private LocalDateTime bookedAt;
 
@@ -164,6 +167,14 @@ public class Booking {
 
     public void setPassengerEmail(String passengerEmail) {
         this.passengerEmail = passengerEmail;
+    }
+
+    public Boolean getBookingForSelf() {
+        return bookingForSelf;
+    }
+
+    public void setBookingForSelf(Boolean bookingForSelf) {
+        this.bookingForSelf = bookingForSelf;
     }
 
     public LocalDateTime getBookedAt() {

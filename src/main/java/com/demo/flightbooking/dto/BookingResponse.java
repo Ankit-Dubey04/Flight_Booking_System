@@ -17,6 +17,7 @@ public class BookingResponse {
     private LocalDateTime arrivalTime;
     private String passengerName;
     private String passengerEmail;
+    private Boolean bookingForSelf;
     private TravelClass travelClass;
     private Integer seatsBooked;
     private Double pricePerSeat;
@@ -111,6 +112,14 @@ public class BookingResponse {
 
     public void setPassengerEmail(String passengerEmail) {
         this.passengerEmail = passengerEmail;
+    }
+
+    public Boolean getBookingForSelf() {
+        return bookingForSelf;
+    }
+
+    public void setBookingForSelf(Boolean bookingForSelf) {
+        this.bookingForSelf = bookingForSelf;
     }
 
     public TravelClass getTravelClass() {
