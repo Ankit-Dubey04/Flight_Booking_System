@@ -27,6 +27,12 @@ public class AdminFlightServiceImpl implements AdminFlightService {
         flight.setDepartureTime(dto.getDepartureTime());
         flight.setArrivalTime(dto.getArrivalTime());
         flight.setPrice(dto.getPrice());
+        flight.setEconomyPrice(dto.getEconomyPrice());
+        flight.setBusinessPrice(dto.getBusinessPrice());
+        flight.setFirstClassPrice(dto.getFirstClassPrice());
+        flight.setEconomySeatsAvailable(dto.getEconomySeatsAvailable());
+        flight.setBusinessSeatsAvailable(dto.getBusinessSeatsAvailable());
+        flight.setFirstClassSeatsAvailable(dto.getFirstClassSeatsAvailable());
         flight.setStatus(dto.getStatus());
 
         return adminFlightRepository.save(flight);
@@ -46,6 +52,12 @@ public class AdminFlightServiceImpl implements AdminFlightService {
         flight.setDepartureTime(dto.getDepartureTime());
         flight.setArrivalTime(dto.getArrivalTime());
         flight.setPrice(dto.getPrice());
+        flight.setEconomyPrice(dto.getEconomyPrice());
+        flight.setBusinessPrice(dto.getBusinessPrice());
+        flight.setFirstClassPrice(dto.getFirstClassPrice());
+        flight.setEconomySeatsAvailable(dto.getEconomySeatsAvailable());
+        flight.setBusinessSeatsAvailable(dto.getBusinessSeatsAvailable());
+        flight.setFirstClassSeatsAvailable(dto.getFirstClassSeatsAvailable());
         flight.setStatus(dto.getStatus());
 
         return adminFlightRepository.save(flight);

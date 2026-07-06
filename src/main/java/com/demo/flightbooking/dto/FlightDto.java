@@ -17,6 +17,18 @@ public class FlightDto {
 
     private Double price;
 
+    private Double economyPrice;
+
+    private Double businessPrice;
+
+    private Double firstClassPrice;
+
+    private Integer economySeatsAvailable;
+
+    private Integer businessSeatsAvailable;
+
+    private Integer firstClassSeatsAvailable;
+
     private String status;
 
     public String getFlightNumber() {
@@ -73,6 +85,54 @@ public class FlightDto {
 
     public void setPrice(Double price) {
         this.price = price;
+    }
+
+    public Double getEconomyPrice() {
+        return economyPrice;
+    }
+
+    public void setEconomyPrice(Double economyPrice) {
+        this.economyPrice = economyPrice;
+    }
+
+    public Double getBusinessPrice() {
+        return businessPrice;
+    }
+
+    public void setBusinessPrice(Double businessPrice) {
+        this.businessPrice = businessPrice;
+    }
+
+    public Double getFirstClassPrice() {
+        return firstClassPrice;
+    }
+
+    public void setFirstClassPrice(Double firstClassPrice) {
+        this.firstClassPrice = firstClassPrice;
+    }
+
+    public Integer getEconomySeatsAvailable() {
+        return economySeatsAvailable;
+    }
+
+    public void setEconomySeatsAvailable(Integer economySeatsAvailable) {
+        this.economySeatsAvailable = economySeatsAvailable;
+    }
+
+    public Integer getBusinessSeatsAvailable() {
+        return businessSeatsAvailable;
+    }
+
+    public void setBusinessSeatsAvailable(Integer businessSeatsAvailable) {
+        this.businessSeatsAvailable = businessSeatsAvailable;
+    }
+
+    public Integer getFirstClassSeatsAvailable() {
+        return firstClassSeatsAvailable;
+    }
+
+    public void setFirstClassSeatsAvailable(Integer firstClassSeatsAvailable) {
+        this.firstClassSeatsAvailable = firstClassSeatsAvailable;
     }
 
     public String getStatus() {

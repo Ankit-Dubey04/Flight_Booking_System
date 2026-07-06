@@ -47,6 +47,12 @@ public class DataInitializer {
             f1.setDepartureTime(LocalDateTime.of(2025, 8, 10, 6, 0));
             f1.setArrivalTime(LocalDateTime.of(2025, 8, 10, 8, 15));
             f1.setPrice(4500.00);
+            f1.setEconomyPrice(4500.00);
+            f1.setBusinessPrice(7800.00);
+            f1.setFirstClassPrice(12000.00);
+            f1.setEconomySeatsAvailable(120);
+            f1.setBusinessSeatsAvailable(24);
+            f1.setFirstClassSeatsAvailable(8);
             f1.setStatus("SCHEDULED");
 
             Flight f2 = new Flight();
@@ -57,6 +63,12 @@ public class DataInitializer {
             f2.setDepartureTime(LocalDateTime.of(2025, 8, 10, 9, 30));
             f2.setArrivalTime(LocalDateTime.of(2025, 8, 10, 11, 0));
             f2.setPrice(3200.00);
+            f2.setEconomyPrice(3200.00);
+            f2.setBusinessPrice(6200.00);
+            f2.setFirstClassPrice(9500.00);
+            f2.setEconomySeatsAvailable(132);
+            f2.setBusinessSeatsAvailable(18);
+            f2.setFirstClassSeatsAvailable(6);
             f2.setStatus("SCHEDULED");
 
             Flight f3 = new Flight();
@@ -67,6 +79,12 @@ public class DataInitializer {
             f3.setDepartureTime(LocalDateTime.of(2025, 8, 11, 7, 45));
             f3.setArrivalTime(LocalDateTime.of(2025, 8, 11, 9, 0));
             f3.setPrice(2800.00);
+            f3.setEconomyPrice(2800.00);
+            f3.setBusinessPrice(5400.00);
+            f3.setFirstClassPrice(8200.00);
+            f3.setEconomySeatsAvailable(110);
+            f3.setBusinessSeatsAvailable(16);
+            f3.setFirstClassSeatsAvailable(4);
             f3.setStatus("SCHEDULED");
 
             Flight f4 = new Flight();
@@ -77,6 +95,12 @@ public class DataInitializer {
             f4.setDepartureTime(LocalDateTime.of(2025, 8, 12, 14, 0));
             f4.setArrivalTime(LocalDateTime.of(2025, 8, 12, 16, 30));
             f4.setPrice(5100.00);
+            f4.setEconomyPrice(5100.00);
+            f4.setBusinessPrice(8800.00);
+            f4.setFirstClassPrice(13600.00);
+            f4.setEconomySeatsAvailable(126);
+            f4.setBusinessSeatsAvailable(22);
+            f4.setFirstClassSeatsAvailable(8);
             f4.setStatus("SCHEDULED");
 
             Flight f5 = new Flight();
@@ -87,6 +111,12 @@ public class DataInitializer {
             f5.setDepartureTime(LocalDateTime.of(2025, 8, 13, 11, 15));
             f5.setArrivalTime(LocalDateTime.of(2025, 8, 13, 13, 30));
             f5.setPrice(3900.00);
+            f5.setEconomyPrice(3900.00);
+            f5.setBusinessPrice(6900.00);
+            f5.setFirstClassPrice(10400.00);
+            f5.setEconomySeatsAvailable(118);
+            f5.setBusinessSeatsAvailable(20);
+            f5.setFirstClassSeatsAvailable(6);
             f5.setStatus("SCHEDULED");
 
             Flight f6 = new Flight();
@@ -97,6 +127,12 @@ public class DataInitializer {
             f6.setDepartureTime(LocalDateTime.of(2025, 8, 15, 2, 30));
             f6.setArrivalTime(LocalDateTime.of(2025, 8, 15, 5, 0));
             f6.setPrice(18500.00);
+            f6.setEconomyPrice(18500.00);
+            f6.setBusinessPrice(32500.00);
+            f6.setFirstClassPrice(52500.00);
+            f6.setEconomySeatsAvailable(180);
+            f6.setBusinessSeatsAvailable(32);
+            f6.setFirstClassSeatsAvailable(12);
             f6.setStatus("SCHEDULED");
 
             Flight f7 = new Flight();
@@ -107,6 +143,12 @@ public class DataInitializer {
             f7.setDepartureTime(LocalDateTime.of(2025, 8, 16, 22, 0));
             f7.setArrivalTime(LocalDateTime.of(2025, 8, 17, 6, 30));
             f7.setPrice(42000.00);
+            f7.setEconomyPrice(42000.00);
+            f7.setBusinessPrice(79000.00);
+            f7.setFirstClassPrice(122000.00);
+            f7.setEconomySeatsAvailable(210);
+            f7.setBusinessSeatsAvailable(40);
+            f7.setFirstClassSeatsAvailable(10);
             f7.setStatus("SCHEDULED");
 
             Flight f8 = new Flight();
@@ -117,6 +159,12 @@ public class DataInitializer {
             f8.setDepartureTime(LocalDateTime.of(2025, 8, 10, 18, 0));
             f8.setArrivalTime(LocalDateTime.of(2025, 8, 10, 20, 30));
             f8.setPrice(4000.00);
+            f8.setEconomyPrice(4000.00);
+            f8.setBusinessPrice(7100.00);
+            f8.setFirstClassPrice(10900.00);
+            f8.setEconomySeatsAvailable(0);
+            f8.setBusinessSeatsAvailable(0);
+            f8.setFirstClassSeatsAvailable(0);
             f8.setStatus("CANCELLED");
 
             Flight f9 = new Flight();
@@ -127,6 +175,12 @@ public class DataInitializer {
             f9.setDepartureTime(LocalDateTime.of(2025, 8, 11, 15, 0));
             f9.setArrivalTime(LocalDateTime.of(2025, 8, 11, 17, 45));
             f9.setPrice(3600.00);
+            f9.setEconomyPrice(3600.00);
+            f9.setBusinessPrice(6500.00);
+            f9.setFirstClassPrice(9800.00);
+            f9.setEconomySeatsAvailable(98);
+            f9.setBusinessSeatsAvailable(14);
+            f9.setFirstClassSeatsAvailable(4);
             f9.setStatus("DELAYED");
 
             flightRepository.save(f1);
