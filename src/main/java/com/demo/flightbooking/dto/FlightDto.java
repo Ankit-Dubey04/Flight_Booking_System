@@ -29,6 +29,8 @@ public class FlightDto {
 
     private Integer firstClassSeatsAvailable;
 
+    private Double discountPercentage;
+
     private String status;
 
     public String getFlightNumber() {
@@ -133,6 +135,14 @@ public class FlightDto {
 
     public void setFirstClassSeatsAvailable(Integer firstClassSeatsAvailable) {
         this.firstClassSeatsAvailable = firstClassSeatsAvailable;
+    }
+
+    public Double getDiscountPercentage() {
+        return discountPercentage;
+    }
+
+    public void setDiscountPercentage(Double discountPercentage) {
+        this.discountPercentage = discountPercentage;
     }
 
     public String getStatus() {

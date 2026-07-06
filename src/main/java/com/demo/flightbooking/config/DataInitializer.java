@@ -53,6 +53,7 @@ public class DataInitializer {
             f1.setEconomySeatsAvailable(120);
             f1.setBusinessSeatsAvailable(24);
             f1.setFirstClassSeatsAvailable(8);
+            f1.setDiscountPercentage(10.0);
             f1.setStatus("SCHEDULED");
 
             Flight f2 = new Flight();
@@ -69,6 +70,7 @@ public class DataInitializer {
             f2.setEconomySeatsAvailable(132);
             f2.setBusinessSeatsAvailable(18);
             f2.setFirstClassSeatsAvailable(6);
+            f2.setDiscountPercentage(5.0);
             f2.setStatus("SCHEDULED");
 
             Flight f3 = new Flight();
@@ -85,6 +87,7 @@ public class DataInitializer {
             f3.setEconomySeatsAvailable(110);
             f3.setBusinessSeatsAvailable(16);
             f3.setFirstClassSeatsAvailable(4);
+            f3.setDiscountPercentage(0.0);
             f3.setStatus("SCHEDULED");
 
             Flight f4 = new Flight();
@@ -101,6 +104,7 @@ public class DataInitializer {
             f4.setEconomySeatsAvailable(126);
             f4.setBusinessSeatsAvailable(22);
             f4.setFirstClassSeatsAvailable(8);
+            f4.setDiscountPercentage(12.5);
             f4.setStatus("SCHEDULED");
 
             Flight f5 = new Flight();
@@ -117,6 +121,7 @@ public class DataInitializer {
             f5.setEconomySeatsAvailable(118);
             f5.setBusinessSeatsAvailable(20);
             f5.setFirstClassSeatsAvailable(6);
+            f5.setDiscountPercentage(7.5);
             f5.setStatus("SCHEDULED");
 
             Flight f6 = new Flight();
@@ -133,6 +138,7 @@ public class DataInitializer {
             f6.setEconomySeatsAvailable(180);
             f6.setBusinessSeatsAvailable(32);
             f6.setFirstClassSeatsAvailable(12);
+            f6.setDiscountPercentage(15.0);
             f6.setStatus("SCHEDULED");
 
             Flight f7 = new Flight();
@@ -149,6 +155,7 @@ public class DataInitializer {
             f7.setEconomySeatsAvailable(210);
             f7.setBusinessSeatsAvailable(40);
             f7.setFirstClassSeatsAvailable(10);
+            f7.setDiscountPercentage(20.0);
             f7.setStatus("SCHEDULED");
 
             Flight f8 = new Flight();
@@ -165,6 +172,7 @@ public class DataInitializer {
             f8.setEconomySeatsAvailable(0);
             f8.setBusinessSeatsAvailable(0);
             f8.setFirstClassSeatsAvailable(0);
+            f8.setDiscountPercentage(0.0);
             f8.setStatus("CANCELLED");
 
             Flight f9 = new Flight();
@@ -181,6 +189,7 @@ public class DataInitializer {
             f9.setEconomySeatsAvailable(98);
             f9.setBusinessSeatsAvailable(14);
             f9.setFirstClassSeatsAvailable(4);
+            f9.setDiscountPercentage(8.0);
             f9.setStatus("DELAYED");
 
             flightRepository.save(f1);

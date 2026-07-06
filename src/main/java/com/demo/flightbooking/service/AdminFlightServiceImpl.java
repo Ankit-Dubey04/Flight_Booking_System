@@ -33,6 +33,7 @@ public class AdminFlightServiceImpl implements AdminFlightService {
         flight.setEconomySeatsAvailable(dto.getEconomySeatsAvailable());
         flight.setBusinessSeatsAvailable(dto.getBusinessSeatsAvailable());
         flight.setFirstClassSeatsAvailable(dto.getFirstClassSeatsAvailable());
+        flight.setDiscountPercentage(dto.getDiscountPercentage());
         flight.setStatus(dto.getStatus());
 
         return adminFlightRepository.save(flight);
@@ -58,6 +59,7 @@ public class AdminFlightServiceImpl implements AdminFlightService {
         flight.setEconomySeatsAvailable(dto.getEconomySeatsAvailable());
         flight.setBusinessSeatsAvailable(dto.getBusinessSeatsAvailable());
         flight.setFirstClassSeatsAvailable(dto.getFirstClassSeatsAvailable());
+        flight.setDiscountPercentage(dto.getDiscountPercentage());
         flight.setStatus(dto.getStatus());
 
         return adminFlightRepository.save(flight);

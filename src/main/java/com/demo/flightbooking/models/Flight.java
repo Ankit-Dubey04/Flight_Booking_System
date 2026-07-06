@@ -42,6 +42,8 @@ public class Flight {
 
     private Integer firstClassSeatsAvailable;
 
+    private Double discountPercentage;
+
     private String status;
 
     public Long getId() {
@@ -156,12 +158,28 @@ public class Flight {
         this.firstClassSeatsAvailable = firstClassSeatsAvailable;
     }
 
+    public Double getDiscountPercentage() {
+        return discountPercentage;
+    }
+
+    public void setDiscountPercentage(Double discountPercentage) {
+        this.discountPercentage = discountPercentage;
+    }
+
     @Transient
     public Integer getSeatsAvailable() {
         int economy = economySeatsAvailable != null ? economySeatsAvailable : 0;
         int business = businessSeatsAvailable != null ? businessSeatsAvailable : 0;
         int firstClass = firstClassSeatsAvailable != null ? firstClassSeatsAvailable : 0;
         return economy + business + firstClass;
+    }
+
+    @Transient
+    public Double getDiscountMultiplier() {
+        if (discountPercentage == null || discountPercentage <= 0) {
+            return 1.0;
+        }
+        return Math.max(0.0, (100.0 - discountPercentage) / 100.0);
     }
 
     public String getStatus() {
