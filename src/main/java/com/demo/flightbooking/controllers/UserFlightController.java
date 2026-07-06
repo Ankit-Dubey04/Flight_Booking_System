@@ -1,5 +1,6 @@
 package com.demo.flightbooking.controllers;
 
+import com.demo.flightbooking.dto.ConnectingFlightResponse;
 import com.demo.flightbooking.models.Flight;
 import com.demo.flightbooking.service.AdminFlightService;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -35,6 +36,15 @@ public class UserFlightController {
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate departureDate
     ) {
         return ResponseEntity.ok(flightService.searchFlights(source, destination, departureDate));
+    }
+
+    @GetMapping("/connecting")
+    public ResponseEntity<List<ConnectingFlightResponse>> searchConnectingFlights(
+            @RequestParam String source,
+            @RequestParam String destination,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate departureDate
+    ) {
+        return ResponseEntity.ok(flightService.searchConnectingFlights(source, destination, departureDate));
     }
 
     @GetMapping("/{id}")

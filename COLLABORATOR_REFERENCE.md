@@ -16,6 +16,8 @@ This file is a handoff reference for collaborators and coding agents working in 
   - text ticket download
   - booking cancellation
   - class-wise pricing, seats, and discounts
+  - connecting-flight search
+  - user-selected seat numbers
 
 ## Important Conventions
 
@@ -31,6 +33,7 @@ This file is a handoff reference for collaborators and coding agents working in 
   - `FIRST_CLASS`
 - Booking price is based on selected class price, then reduced by the flight discount percentage
 - Round-trip booking is represented by one booking row with an optional return flight
+- Seat selection is optional, but when provided it is validated against confirmed bookings for the same flight and class
 
 ## Key Files
 
@@ -57,6 +60,7 @@ This file is a handoff reference for collaborators and coding agents working in 
 
 - [Flight.java](D:/java flight/Flight_Booking_System/src/main/java/com/demo/flightbooking/models/Flight.java:1)
 - [FlightDto.java](D:/java flight/Flight_Booking_System/src/main/java/com/demo/flightbooking/dto/FlightDto.java:1)
+- [ConnectingFlightResponse.java](D:/java flight/Flight_Booking_System/src/main/java/com/demo/flightbooking/dto/ConnectingFlightResponse.java:1)
 - [AdminFlightController.java](D:/java flight/Flight_Booking_System/src/main/java/com/demo/flightbooking/controllers/AdminFlightController.java:1)
 - [UserFlightController.java](D:/java flight/Flight_Booking_System/src/main/java/com/demo/flightbooking/controllers/UserFlightController.java:1)
 - [AdminFlightService.java](D:/java flight/Flight_Booking_System/src/main/java/com/demo/flightbooking/service/AdminFlightService.java:1)
@@ -138,6 +142,8 @@ Main fields:
 - `returnFlight`
 - `travelClass`
 - `seatsBooked`
+- `selectedSeatNumbers`
+- `returnSelectedSeatNumbers`
 - `pricePerSeat`
 - `returnPricePerSeat`
 - `discountPercentage`
@@ -174,9 +180,19 @@ Requires `ADMIN` role.
 ### User Flight Browsing
 
 - `GET /api/flights`
+- `GET /api/flights/search`
+- `GET /api/flights/connecting`
 - `GET /api/flights/{id}`
 
 Requires authentication.
+
+Connecting-flight search:
+- endpoint: `GET /api/flights/connecting?source={source}&destination={destination}&departureDate={yyyy-MM-dd}`
+- `source` and `destination` are required
+- `departureDate` is optional and filters the first leg departure date
+- results contain `firstFlight`, `secondFlight`, `connectionCity`, `layoverMinutes`, `totalTravelMinutes`, and discounted class totals
+- valid connections require the first leg destination to match the second leg source
+- layover must be between 30 minutes and 12 hours
 
 ### Booking and Tickets
 
@@ -194,6 +210,15 @@ Round-trip request behavior:
 - `returnFlightId` must refer to a different flight whose route is the reverse of the outbound route
 - the return flight must depart after the outbound flight arrives when both timestamps are present
 - the ticket download endpoint returns a plain text `.txt` attachment for the authenticated user's owned ticket
+
+Seat-selection request behavior:
+- one-way bookings may include `selectedSeatNumbers`
+- round-trip bookings may include `selectedSeatNumbers` and `returnSelectedSeatNumbers`
+- if provided, each seat list must contain exactly `seatsBooked` values
+- seat values are trimmed, uppercased, and limited to letters, numbers, and hyphens
+- duplicate seat values in the same request are rejected
+- selected seats are rejected if already used by a `CONFIRMED` booking for the same flight and travel class
+- return seat numbers are only allowed when `returnFlightId` is present
 
 ## Security Behavior
 
@@ -227,6 +252,8 @@ Current behavior:
 - passenger name and email are copied from logged-in user
 - seat inventory is reduced from the selected class on the outbound flight
 - for round trips, seat inventory is also reduced from the selected class on the return flight
+- optional outbound and return seat numbers are stored on the booking
+- selected seats are checked against confirmed outbound and return-leg bookings for the same flight and class
 - booking price per seat is based on class price:
   - economy uses `economyPrice`, fallback `price`
   - business uses `businessPrice`, fallback `price`
@@ -235,13 +262,17 @@ Current behavior:
 - return discount is applied from `returnFlight.discountPercentage` when `returnFlightId` is provided
 - total price is outbound leg total plus return leg total when present
 - cancellation restores seats to the original class on both outbound and return flights
+- cancellation frees previously selected seats because only `CONFIRMED` bookings are considered occupied
 - cancelled bookings remain stored and are marked `CANCELLED`
 - ticket download is generated in `BookingServiceImpl` as plain text and served by `BookingController`
+- ticket download includes selected outbound and return seat numbers when present
 
 ## Known Assumptions
 
 - one booking currently represents one user-owned ticket record, including both legs for a round trip
 - no separate passenger list exists yet
+- seat numbers are stored as comma-separated strings on `Booking`, not as a separate seat map/table
+- seat selection does not currently validate seat layout, row/class boundaries, or aircraft capacity beyond count and confirmed-booking conflicts
 - no payment integration exists
 - no booking history filter exists beyond "my bookings"
 - no admin booking management exists yet
@@ -255,6 +286,9 @@ If adding features, these are the safest places to extend:
 
 - booking rules and pricing:
   - [BookingServiceImpl.java](D:/java flight/Flight_Booking_System/src/main/java/com/demo/flightbooking/service/BookingServiceImpl.java:1)
+- connecting-flight search:
+  - [UserFlightController.java](D:/java flight/Flight_Booking_System/src/main/java/com/demo/flightbooking/controllers/UserFlightController.java:1)
+  - [AdminFlightServiceImpl.java](D:/java flight/Flight_Booking_System/src/main/java/com/demo/flightbooking/service/AdminFlightServiceImpl.java:1)
 - admin flight creation/update payload:
   - [FlightDto.java](D:/java flight/Flight_Booking_System/src/main/java/com/demo/flightbooking/dto/FlightDto.java:1)
   - [AdminFlightServiceImpl.java](D:/java flight/Flight_Booking_System/src/main/java/com/demo/flightbooking/service/AdminFlightServiceImpl.java:1)
@@ -271,7 +305,7 @@ These should be straightforward next additions:
 - booking cancellation policy and refund amount
 - per-class discounts instead of flight-wide discount
 - multi-passenger booking
-- seat selection and seat numbers
+- richer aircraft seat maps and class-aware seat layout validation
 - payment status and payment transaction records
 - admin booking list and booking search
 - user profile and booking history filters

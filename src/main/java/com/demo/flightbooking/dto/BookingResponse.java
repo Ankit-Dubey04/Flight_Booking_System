@@ -4,6 +4,7 @@ import com.demo.flightbooking.enums.BookingStatus;
 import com.demo.flightbooking.enums.TravelClass;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class BookingResponse {
     private Long bookingId;
@@ -28,6 +29,8 @@ public class BookingResponse {
     private Boolean roundTrip;
     private TravelClass travelClass;
     private Integer seatsBooked;
+    private List<String> selectedSeatNumbers;
+    private List<String> returnSelectedSeatNumbers;
     private Double pricePerSeat;
     private Double returnPricePerSeat;
     private Double discountPercentage;
@@ -212,6 +215,22 @@ public class BookingResponse {
 
     public void setSeatsBooked(Integer seatsBooked) {
         this.seatsBooked = seatsBooked;
+    }
+
+    public List<String> getSelectedSeatNumbers() {
+        return selectedSeatNumbers;
+    }
+
+    public void setSelectedSeatNumbers(List<String> selectedSeatNumbers) {
+        this.selectedSeatNumbers = selectedSeatNumbers;
+    }
+
+    public List<String> getReturnSelectedSeatNumbers() {
+        return returnSelectedSeatNumbers;
+    }
+
+    public void setReturnSelectedSeatNumbers(List<String> returnSelectedSeatNumbers) {
+        this.returnSelectedSeatNumbers = returnSelectedSeatNumbers;
     }
 
     public Double getPricePerSeat() {

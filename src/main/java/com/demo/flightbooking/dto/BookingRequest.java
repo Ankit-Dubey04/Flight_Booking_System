@@ -6,6 +6,8 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
+import java.util.List;
+
 public class BookingRequest {
 
     @NotNull(message = "Flight id is required")
@@ -19,6 +21,10 @@ public class BookingRequest {
     @NotNull(message = "Seats booked is required")
     @Min(value = 1, message = "At least one seat must be booked")
     private Integer seatsBooked;
+
+    private List<@Size(max = 10, message = "Seat number must be at most 10 characters") String> selectedSeatNumbers;
+
+    private List<@Size(max = 10, message = "Return seat number must be at most 10 characters") String> returnSelectedSeatNumbers;
 
     private Boolean bookingForSelf = true;
 
@@ -59,6 +65,22 @@ public class BookingRequest {
 
     public void setSeatsBooked(Integer seatsBooked) {
         this.seatsBooked = seatsBooked;
+    }
+
+    public List<String> getSelectedSeatNumbers() {
+        return selectedSeatNumbers;
+    }
+
+    public void setSelectedSeatNumbers(List<String> selectedSeatNumbers) {
+        this.selectedSeatNumbers = selectedSeatNumbers;
+    }
+
+    public List<String> getReturnSelectedSeatNumbers() {
+        return returnSelectedSeatNumbers;
+    }
+
+    public void setReturnSelectedSeatNumbers(List<String> returnSelectedSeatNumbers) {
+        this.returnSelectedSeatNumbers = returnSelectedSeatNumbers;
     }
 
     public Boolean getBookingForSelf() {

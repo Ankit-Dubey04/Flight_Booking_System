@@ -47,6 +47,12 @@ public class Booking {
     @Column(nullable = false)
     private Integer seatsBooked;
 
+    @Column(length = 500)
+    private String selectedSeatNumbers;
+
+    @Column(length = 500)
+    private String returnSelectedSeatNumbers;
+
     @Column(nullable = false)
     private Double pricePerSeat;
 
@@ -139,6 +145,22 @@ public class Booking {
 
     public void setSeatsBooked(Integer seatsBooked) {
         this.seatsBooked = seatsBooked;
+    }
+
+    public String getSelectedSeatNumbers() {
+        return selectedSeatNumbers;
+    }
+
+    public void setSelectedSeatNumbers(String selectedSeatNumbers) {
+        this.selectedSeatNumbers = selectedSeatNumbers;
+    }
+
+    public String getReturnSelectedSeatNumbers() {
+        return returnSelectedSeatNumbers;
+    }
+
+    public void setReturnSelectedSeatNumbers(String returnSelectedSeatNumbers) {
+        this.returnSelectedSeatNumbers = returnSelectedSeatNumbers;
     }
 
     public Double getPricePerSeat() {

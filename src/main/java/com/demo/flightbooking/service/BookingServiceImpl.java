@@ -21,8 +21,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 @Service
@@ -51,6 +53,8 @@ public class BookingServiceImpl implements BookingService {
         Flight returnFlight = resolveReturnFlight(request, flight);
 
         int requestedSeats = request.getSeatsBooked();
+        List<String> selectedSeatNumbers = normalizeSeatNumbers(request.getSelectedSeatNumbers(), requestedSeats, "Selected seat numbers");
+        List<String> returnSelectedSeatNumbers = normalizeSeatNumbers(request.getReturnSelectedSeatNumbers(), requestedSeats, "Return selected seat numbers");
         double pricePerSeat = getPricePerSeat(flight, request.getTravelClass());
         double discountPercentage = defaultDiscount(flight.getDiscountPercentage());
         double discountedPricePerSeat = pricePerSeat * flight.getDiscountMultiplier();
@@ -63,6 +67,13 @@ public class BookingServiceImpl implements BookingService {
             returnPricePerSeat = getPricePerSeat(returnFlight, request.getTravelClass()) * returnFlight.getDiscountMultiplier();
             returnDiscountPercentage = defaultDiscount(returnFlight.getDiscountPercentage());
             returnTotalPrice = returnPricePerSeat * requestedSeats;
+        } else if (!returnSelectedSeatNumbers.isEmpty()) {
+            throw new IllegalArgumentException("Return seat numbers can only be selected for round-trip bookings");
+        }
+
+        validateSelectedSeatsAvailable(flight, request.getTravelClass(), selectedSeatNumbers);
+        if (returnFlight != null) {
+            validateSelectedSeatsAvailable(returnFlight, request.getTravelClass(), returnSelectedSeatNumbers);
         }
 
         reserveSeats(flight, request.getTravelClass(), requestedSeats);
@@ -81,6 +92,8 @@ public class BookingServiceImpl implements BookingService {
         booking.setReturnFlight(returnFlight);
         booking.setTravelClass(request.getTravelClass());
         booking.setSeatsBooked(requestedSeats);
+        booking.setSelectedSeatNumbers(joinSeatNumbers(selectedSeatNumbers));
+        booking.setReturnSelectedSeatNumbers(joinSeatNumbers(returnSelectedSeatNumbers));
         booking.setPricePerSeat(discountedPricePerSeat);
         booking.setReturnPricePerSeat(returnPricePerSeat);
         booking.setDiscountPercentage(discountPercentage);
@@ -292,6 +305,73 @@ public class BookingServiceImpl implements BookingService {
         return "TKT-" + UUID.randomUUID().toString().replace("-", "").substring(0, 10).toUpperCase();
     }
 
+    private List<String> normalizeSeatNumbers(List<String> seatNumbers, int requestedSeats, String fieldLabel) {
+        if (seatNumbers == null || seatNumbers.isEmpty()) {
+            return List.of();
+        }
+
+        if (seatNumbers.size() != requestedSeats) {
+            throw new IllegalArgumentException(fieldLabel + " must match seats booked");
+        }
+
+        Set<String> normalizedSeatNumbers = new LinkedHashSet<>();
+        for (String seatNumber : seatNumbers) {
+            if (seatNumber == null || seatNumber.isBlank()) {
+                throw new IllegalArgumentException(fieldLabel + " cannot contain blank values");
+            }
+
+            String normalizedSeatNumber = seatNumber.trim().toUpperCase();
+            if (!normalizedSeatNumber.matches("^[A-Z0-9-]{1,10}$")) {
+                throw new IllegalArgumentException("Seat numbers may contain only letters, numbers, and hyphens");
+            }
+
+            if (!normalizedSeatNumbers.add(normalizedSeatNumber)) {
+                throw new IllegalArgumentException(fieldLabel + " cannot contain duplicate values");
+            }
+        }
+
+        return List.copyOf(normalizedSeatNumbers);
+    }
+
+    private void validateSelectedSeatsAvailable(Flight flight, TravelClass travelClass, List<String> requestedSeatNumbers) {
+        if (requestedSeatNumbers.isEmpty()) {
+            return;
+        }
+
+        Set<String> occupiedSeatNumbers = getOccupiedSeatNumbers(flight.getId(), travelClass);
+        for (String seatNumber : requestedSeatNumbers) {
+            if (occupiedSeatNumbers.contains(seatNumber)) {
+                throw new IllegalArgumentException("Seat " + seatNumber + " is already booked for this flight and class");
+            }
+        }
+    }
+
+    private Set<String> getOccupiedSeatNumbers(Long flightId, TravelClass travelClass) {
+        Set<String> occupiedSeatNumbers = new LinkedHashSet<>();
+
+        bookingRepository.findByFlightIdAndTravelClassAndStatus(flightId, travelClass, BookingStatus.CONFIRMED)
+                .forEach(booking -> occupiedSeatNumbers.addAll(splitSeatNumbers(booking.getSelectedSeatNumbers())));
+
+        bookingRepository.findByReturnFlightIdAndTravelClassAndStatus(flightId, travelClass, BookingStatus.CONFIRMED)
+                .forEach(booking -> occupiedSeatNumbers.addAll(splitSeatNumbers(booking.getReturnSelectedSeatNumbers())));
+
+        return occupiedSeatNumbers;
+    }
+
+    private String joinSeatNumbers(List<String> seatNumbers) {
+        if (seatNumbers == null || seatNumbers.isEmpty()) {
+            return null;
+        }
+        return String.join(",", seatNumbers);
+    }
+
+    private List<String> splitSeatNumbers(String seatNumbers) {
+        if (seatNumbers == null || seatNumbers.isBlank()) {
+            return List.of();
+        }
+        return List.of(seatNumbers.split(","));
+    }
+
     private boolean equalsIgnoreCase(String first, String second) {
         return first != null && second != null && first.equalsIgnoreCase(second);
     }
@@ -310,6 +390,10 @@ public class BookingServiceImpl implements BookingService {
         ticket.append("Passenger Email: ").append(booking.getPassengerEmail()).append('\n');
         ticket.append("Travel Class: ").append(booking.getTravelClass()).append('\n');
         ticket.append("Seats Booked: ").append(booking.getSeatsBooked()).append('\n');
+        appendSeatNumbers(ticket, "Selected Seats", booking.getSelectedSeatNumbers());
+        if (returnFlight != null) {
+            appendSeatNumbers(ticket, "Return Selected Seats", booking.getReturnSelectedSeatNumbers());
+        }
         ticket.append('\n');
         appendFlightDetails(ticket, "Outbound Flight", outboundFlight, booking.getPricePerSeat(), booking.getDiscountPercentage(), getOutboundTotalPrice(booking));
         if (returnFlight != null) {
@@ -340,6 +424,12 @@ public class BookingServiceImpl implements BookingService {
         ticket.append("Price Per Seat: ").append(pricePerSeat).append('\n');
         ticket.append("Discount Percentage: ").append(discountPercentage).append('\n');
         ticket.append("Leg Total: ").append(legTotal).append('\n');
+    }
+
+    private void appendSeatNumbers(StringBuilder ticket, String label, String seatNumbers) {
+        if (seatNumbers != null && !seatNumbers.isBlank()) {
+            ticket.append(label).append(": ").append(seatNumbers).append('\n');
+        }
     }
 
     private Double getOutboundTotalPrice(Booking booking) {
@@ -390,6 +480,8 @@ public class BookingServiceImpl implements BookingService {
         response.setRoundTrip(returnFlight != null);
         response.setTravelClass(booking.getTravelClass());
         response.setSeatsBooked(booking.getSeatsBooked());
+        response.setSelectedSeatNumbers(splitSeatNumbers(booking.getSelectedSeatNumbers()));
+        response.setReturnSelectedSeatNumbers(splitSeatNumbers(booking.getReturnSelectedSeatNumbers()));
         response.setPricePerSeat(booking.getPricePerSeat());
         response.setReturnPricePerSeat(booking.getReturnPricePerSeat());
         response.setDiscountPercentage(booking.getDiscountPercentage());

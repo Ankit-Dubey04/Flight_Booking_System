@@ -1,6 +1,7 @@
 package com.demo.flightbooking.service;
 
 import com.demo.flightbooking.dto.FlightDto;
+import com.demo.flightbooking.dto.ConnectingFlightResponse;
 import com.demo.flightbooking.models.Flight;
 
 import java.time.LocalDate;
@@ -16,6 +17,8 @@ public interface AdminFlightService {
     List<Flight> getAllFlights();
 
     List<Flight> searchFlights(String source, String destination, LocalDate departureDate);
+
+    List<ConnectingFlightResponse> searchConnectingFlights(String source, String destination, LocalDate departureDate);
 
     Flight getFlightById(Long id);
 }
