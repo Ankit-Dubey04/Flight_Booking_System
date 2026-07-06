@@ -1,10 +1,14 @@
 package com.demo.flightbooking.config;
 
+import com.demo.flightbooking.enums.Role;
 import com.demo.flightbooking.models.Flight;
+import com.demo.flightbooking.models.User;
 import com.demo.flightbooking.repository.AdminFlightRepository;
+import com.demo.flightbooking.repository.UserRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDateTime;
 
@@ -12,8 +16,24 @@ import java.time.LocalDateTime;
 public class DataInitializer {
 
     @Bean
-    public CommandLineRunner initFlights(AdminFlightRepository flightRepository) {
+    public CommandLineRunner initFlights(
+            AdminFlightRepository flightRepository,
+            UserRepository userRepository,
+            PasswordEncoder passwordEncoder
+    ) {
         return args -> {
+            if (!userRepository.existsByEmail("admin@flight.com")) {
+                User admin = User.builder()
+                        .name("Admin")
+                        .email("admin@flight.com")
+                        .password(passwordEncoder.encode("admin123"))
+                        .role(Role.ADMIN)
+                        .build();
+
+                userRepository.save(admin);
+                System.out.println("DataInitializer: Default admin user created.");
+            }
+
             if (flightRepository.count() != 0) {
                 System.out.println("DataInitializer: Flights table already has data, skipping seed.");
                 return;
