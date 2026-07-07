@@ -29,5 +29,11 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 
+### React frontend ###
+frontend/node_modules/
+frontend/dist/
+frontend/_tmp_*
+_tmp_*
+
 ### VS Code ###
 .vscode/

@@ -12,6 +12,9 @@ import lombok.NoArgsConstructor;
 public class AuthResponse {
     private String token;
     private String message;
+    private String name;
+    private String email;
+    private String role;
 
     // =====================================================================
     // LOMBOK replaces ALL of the following boilerplate code (commented out):
